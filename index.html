@@ -1,0 +1,55 @@
+<html>
+    <head>
+        <script src="https://unpkg.com/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/vue-router@2.0.0/dist/vue-router.js"></script>
+    </head>
+    <body>
+        
+        <div id="app">
+            <p>
+<router-link to="/">Go to home</router-link>
+            <router-link to="/about">Go to aboute</router-link>
+            </p>
+            
+            <router-view></router-view>
+            <loading v-bind:statut="loading"></loading>
+        </div>
+        <script>
+const NotFound = { template: '<div><p>Page not found 2</p></div>' }
+const Home = { template: '<p>home page {{ nom }}</p>', 
+        data: function () {return {nom:"Olivier"}; }
+    }
+const About = { template: '<div><div>about page</div> <div><button v-on:click="reverseLoading">click me</button></div></div>',
+    methods:{
+        reverseLoading:function(){
+            app.loading = !app.loading;
+            console.log('loading '+ app.loading)
+        }
+    },
+    created:function(){
+        console.log('about ......')
+    }
+ }
+
+
+Vue.component('loading', {
+  template: '<div v-if="statut">loading {{ statut }}</div>',
+  props: ['statut'],
+})
+
+const routes = [
+  { path: '/', component: Home },
+  { path: '/about', component: About }
+]
+const router = new VueRouter({
+  routes // short for routes: routes
+})
+const app = new Vue({
+    data:{
+        loading:false
+    },
+    router
+}).$mount('#app')
+        </script>
+    </body>
+</html>
